@@ -13,5 +13,5 @@
     placeholder={`{{0,0,0}, {500,0,0}, {500,500,0}, {0,500,0}}`}
     bind:value={data}
   />
-  <p on:click={console.log(parse(data))}>{label} = {data}</p>
+  <p on:click={() => console.log(parse(data))}>{label} = {data}</p>
 </div>
