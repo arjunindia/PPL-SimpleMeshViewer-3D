@@ -13,8 +13,8 @@
 
 <main>
   <canvas
-    height={(window.innerHeight / 3) * 2}
-    width={(window.innerWidth / 3) * 2}
+    height={(window.innerHeight / 3) * 2.2}
+    width={(window.innerWidth / 3) * 2.5}
     bind:this={canvas}
   />
   <div class="card">
