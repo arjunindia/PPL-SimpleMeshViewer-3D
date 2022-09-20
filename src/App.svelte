@@ -2,6 +2,7 @@
   import parse from "./lib/parse";
   import ParseInput from "./components/ParseInput.svelte";
   import babylon from "./lib/babylon";
+  import { vectorizePoints, parseColor } from "./lib/babylon";
   import { vertexes, colors, segments } from "./state/store";
   import { onMount } from "svelte";
 

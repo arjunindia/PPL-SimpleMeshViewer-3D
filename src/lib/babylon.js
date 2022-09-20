@@ -3,6 +3,8 @@ import "@babylonjs/inspector";
 import "@babylonjs/loaders/glTF";
 import * as BABYLON from "@babylonjs/core";
 
+import { convertToNumberArray } from "./parse";
+
 export default function babylon(canvas) {
   var startRenderLoop = function (engine, canvas) {
     engine.runRenderLoop(function () {
@@ -85,5 +87,31 @@ export default function babylon(canvas) {
   // Resize
   window.addEventListener("resize", function () {
     engine.resize();
+  });
+}
+
+// Helpers
+
+/**
+ * @param {any[]} points
+ */
+
+export function vectorizePoints(points) {
+  return points.map(
+    (point) => new BABYLON.Vector3(...convertToNumberArray(point))
+  );
+}
+
+//{0xffffffff, 0xffff00ff, 0xff00ffff, 0xff0000ff}
+/**
+ * @param {any[]} colors
+ */
+export function parseColor(colors) {
+  return colors.map((color) => {
+    const r = parseInt(color.slice(3, 5), 16) / 255;
+    const g = parseInt(color.slice(5, 7), 16) / 255;
+    const b = parseInt(color.slice(7, 9), 16) / 255;
+    const a = parseInt(color.slice(9, 11), 16) / 255;
+    return new BABYLON.Color4(r, g, b, a);
   });
 }

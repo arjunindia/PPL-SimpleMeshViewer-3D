@@ -36,3 +36,11 @@ export default function parse(str) {
   }
   return result;
 }
+
+export function convertToNumberArray(arr) {
+  return arr.map((item) => {
+    if (typeof item === "string") {
+      return parseFloat(item);
+    }
+  });
+}
