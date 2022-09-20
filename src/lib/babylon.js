@@ -103,9 +103,6 @@ export function vectorizePoints(points) {
 }
 
 //{0xffffffff, 0xffff00ff, 0xff00ffff, 0xff0000ff}
-/**
- * @param {any[]} colors
- */
 export function parseColor(colors) {
   return colors.map((color) => {
     const r = parseInt(color.slice(3, 5), 16) / 255;
