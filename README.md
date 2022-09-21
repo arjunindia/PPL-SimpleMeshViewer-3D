@@ -4,6 +4,8 @@ This is a simple mesh viewer for 3D meshes in PewPew Live levels.
 
 ## Usage
 
+https://arjunindia.github.io/PPL-SimpleMeshViewer-3D/
+
 Input the mesh into the given fields.
 example:
 
