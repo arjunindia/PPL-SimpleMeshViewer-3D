@@ -7,9 +7,32 @@
   import { onMount } from "svelte";
 
   let canvas;
+  let button;
+  async function viewMesh() {
+    babylon(canvas)
+      .then((destroy) => {
+        button.addEventListener(
+          "click",
+          (e) => {
+            destroy();
+            viewMesh();
+          },
+          { once: true }
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   onMount(async () => {
-    babylon(canvas);
+    viewMesh();
   });
+  function setMesh() {
+    let vertexArr = vectorizePoints(parse($vertexes));
+    let colorArr = parseColor(parse($colors, true));
+    let segmentArr = parse($segments);
+    console.log({ vertexArr, colorArr, segmentArr });
+  }
 </script>
 
 <main>
@@ -18,14 +41,12 @@
     width={(window.innerWidth / 3) * 2.5}
     bind:this={canvas}
   />
-  <div class="card">
-    {console.log(parse($vertexes))}
-  </div>
   <div class="inputs">
     <ParseInput label={"vertexes"} bind:data={$vertexes} />
     <ParseInput label={"colors"} bind:data={$colors} />
     <ParseInput label={"segments"} bind:data={$segments} />
   </div>
+  <button bind:this={button} on:click={setMesh}>View this mesh!</button>
 </main>
 
 <style>
@@ -33,6 +54,7 @@
     display: flex;
     width: 80vw;
     justify-content: space-between;
+    margin-top: 3vh;
   }
   main {
     display: flex;

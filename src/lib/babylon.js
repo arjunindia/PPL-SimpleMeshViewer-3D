@@ -1,11 +1,15 @@
-import "@babylonjs/core/Debug/debugLayer";
-import "@babylonjs/inspector";
-import "@babylonjs/loaders/glTF";
-import * as BABYLON from "@babylonjs/core";
+//import "@babylonjs/core/Debug/debugLayer";
+//import "@babylonjs/inspector";
+//import "@babylonjs/loaders/glTF";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { Engine } from "@babylonjs/core/Engines/engine";
+import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Scene } from "@babylonjs/core/scene";
+import { Color4 } from "@babylonjs/core/Maths/math.color";
+import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 
-import { convertToNumberArray } from "./parse";
-
-export default function babylon(canvas) {
+export default async function babylon(canvas) {
   var startRenderLoop = function (engine, canvas) {
     engine.runRenderLoop(function () {
       if (sceneToRender && sceneToRender.activeCamera) {
@@ -18,44 +22,40 @@ export default function babylon(canvas) {
   let scene = null;
   let sceneToRender = null;
   let createDefaultEngine = function () {
-    return new BABYLON.Engine(canvas, true, {
+    return new Engine(canvas, true, {
       preserveDrawingBuffer: true,
       stencil: true,
       disableWebGL2Support: false,
     });
   };
   const createScene = () => {
-    const scene = new BABYLON.Scene(engine);
+    const scene = new Scene(engine);
 
-    const camera = new BABYLON.ArcRotateCamera(
+    const camera = new ArcRotateCamera(
       "Camera",
       -Math.PI / 2,
       Math.PI / 2,
       6,
-      BABYLON.Vector3.Zero()
+      Vector3.Zero()
     );
     camera.attachControl(canvas, true);
-    const light = new BABYLON.HemisphericLight(
-      "light",
-      new BABYLON.Vector3(1, 1, 0),
-      scene
-    );
+    const light = new HemisphericLight("light", new Vector3(1, 1, 0), scene);
 
     const myPoints = [
-      new BABYLON.Vector3(-2, -1, 0),
-      new BABYLON.Vector3(0, 1, 0),
-      new BABYLON.Vector3(2, -1, 0),
+      new Vector3(-2, -1, 0),
+      new Vector3(0, 1, 0),
+      new Vector3(2, -1, 0),
     ];
 
     myPoints.push(myPoints[0]);
 
     const myColors = [
-      new BABYLON.Color4(1, 0, 0, 1),
-      new BABYLON.Color4(0, 1, 0, 1),
-      new BABYLON.Color4(0, 0, 1, 1),
+      new Color4(1, 0, 0, 1),
+      new Color4(0, 1, 0, 1),
+      new Color4(0, 0, 1, 1),
     ];
     myColors.push(myColors[0]);
-    const lines = BABYLON.MeshBuilder.CreateLines("lines", {
+    const lines = MeshBuilder.CreateLines("lines", {
       points: myPoints,
       colors: myColors,
     });
@@ -84,10 +84,15 @@ export default function babylon(canvas) {
     sceneToRender = scene;
   });
 
-  // Resize
-  window.addEventListener("resize", function () {
-    engine.resize();
-  });
+  function destroyBabylon() {
+    console.log(scene);
+    scene.dispose();
+    engine.dispose();
+    sceneToRender = null;
+    scene = null;
+    engine = null;
+  }
+  return destroyBabylon;
 }
 
 // Helpers
@@ -97,9 +102,7 @@ export default function babylon(canvas) {
  */
 
 export function vectorizePoints(points) {
-  return points.map(
-    (point) => new BABYLON.Vector3(...convertToNumberArray(point))
-  );
+  return points.map((point) => new Vector3(...point));
 }
 
 //{0xffffffff, 0xffff00ff, 0xff00ffff, 0xff0000ff}
@@ -109,6 +112,6 @@ export function parseColor(colors) {
     const g = parseInt(color.slice(5, 7), 16) / 255;
     const b = parseInt(color.slice(7, 9), 16) / 255;
     const a = parseInt(color.slice(9, 11), 16) / 255;
-    return new BABYLON.Color4(r, g, b, a);
+    return new Color4(r, g, b, a);
   });
 }

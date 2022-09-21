@@ -7,6 +7,6 @@
 
 <div>
   <label for="vertex">{label} = </label>
-  <input id="vertex" name="vertex" placeholder={data} bind:value={data} />
+  <input id="vertex" name="vertex" bind:value={data} />
   <p on:click={() => console.log(parse(data))}>{label} = {data}</p>
 </div>
