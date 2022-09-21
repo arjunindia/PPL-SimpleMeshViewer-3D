@@ -8,8 +8,11 @@
 
   let canvas;
   let button;
+  let vertexArr = vectorizePoints(parse($vertexes));
+  let colorArr = parseColor(parse($colors, true));
+  let segmentArr = parse($segments);
   async function viewMesh() {
-    babylon(canvas)
+    babylon(canvas, vertexArr, colorArr, segmentArr)
       .then((destroy) => {
         button.addEventListener(
           "click",
@@ -28,9 +31,9 @@
     viewMesh();
   });
   function setMesh() {
-    let vertexArr = vectorizePoints(parse($vertexes));
-    let colorArr = parseColor(parse($colors, true));
-    let segmentArr = parse($segments);
+    vertexArr = vectorizePoints(parse($vertexes));
+    colorArr = parseColor(parse($colors, true));
+    segmentArr = parse($segments);
     console.log({ vertexArr, colorArr, segmentArr });
   }
 </script>

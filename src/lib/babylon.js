@@ -9,7 +9,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { Color4 } from "@babylonjs/core/Maths/math.color";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 
-export default async function babylon(canvas) {
+export default async function babylon(canvas, vertexes, colors, segments) {
   var startRenderLoop = function (engine, canvas) {
     engine.runRenderLoop(function () {
       if (sceneToRender && sceneToRender.activeCamera) {
@@ -41,24 +41,34 @@ export default async function babylon(canvas) {
     camera.attachControl(canvas, true);
     const light = new HemisphericLight("light", new Vector3(1, 1, 0), scene);
 
-    const myPoints = [
-      new Vector3(-2, -1, 0),
-      new Vector3(0, 1, 0),
-      new Vector3(2, -1, 0),
-    ];
-
-    myPoints.push(myPoints[0]);
-
-    const myColors = [
-      new Color4(1, 0, 0, 1),
-      new Color4(0, 1, 0, 1),
-      new Color4(0, 0, 1, 1),
-    ];
-    myColors.push(myColors[0]);
-    const lines = MeshBuilder.CreateLines("lines", {
-      points: myPoints,
-      colors: myColors,
+    let myPoints = [];
+    let myColors = [];
+    segments.forEach((segment, n) => {
+      segment.forEach((point) => {
+        myPoints.push(vertexes[point]);
+        myColors.push(colors[point]);
+      });
+      const lines = MeshBuilder.CreateLines("lines" + n, {
+        points: myPoints,
+        colors: myColors,
+      });
+      myPoints = [];
+      myColors = [];
     });
+    // const myPoints = [
+    //   new Vector3(-2, -1, 0),
+    //   new Vector3(0, 1, 0),
+    //   new Vector3(2, -1, 0),
+    // ];
+
+    // myPoints.push(myPoints[0]);
+
+    // const myColors = [
+    //   new Color4(1, 0, 0, 1),
+    //   new Color4(0, 1, 0, 1),
+    //   new Color4(0, 0, 1, 1),
+    // ];
+    // myColors.push(myColors[0]);
 
     return scene;
   };
@@ -111,7 +121,7 @@ export function parseColor(colors) {
     const r = parseInt(color.slice(3, 5), 16) / 255;
     const g = parseInt(color.slice(5, 7), 16) / 255;
     const b = parseInt(color.slice(7, 9), 16) / 255;
-    const a = parseInt(color.slice(9, 11), 16) / 255;
+    const a = parseInt(color.slice(9, 11), 16);
     return new Color4(r, g, b, a);
   });
 }
