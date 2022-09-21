@@ -21,6 +21,9 @@ segments = `{{1,2}, {2,3}, {3,4}, {4,1}}`
 
 PewPew Live is an awesome game, and I want to thank the creators of the game for making it.
 Also it's discord, which I'm a part of, is a great community.
+
 [PewPew Live](https://pewpew.live)
+
 [PewPew Live Discord](https://pewpew.live/discord)
+
 [PewPew Live Community Levels Wiki](https://github.com/pewpewlive/ppl-utils/wiki)
