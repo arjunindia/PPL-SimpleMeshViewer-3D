@@ -8,7 +8,7 @@ export default function parse(str, isColorArray = false) {
   str1 = str1.replace(/}/g, "]");
   if (isColorArray) {
     str1 = str1.replace(/\[/g, `["`);
-    str1 = str1.replace(/, /g, `", "`);
+    str1 = str1.replace(/,/g, `","`);
     str1 = str1.replace(/]/g, `"]`);
   }
   console.log(str1);
